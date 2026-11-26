@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>冷凍庫の容量から入る食数を計算する｜つくってもらう</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap header-in">
+    <a class="logo" href="../">つくってもらう<small>TSUKUTTEMORAU.COM</small></a>
+    <nav class="gnav">
+      <a href="../articles/frozen-bento-prices.html">冷凍弁当</a><a href="../articles/mealkit-total.html">ミールキット</a><a href="../articles/grocery-delivery.html">食材宅配</a><a href="./">冷凍庫の計算</a><a href="../editorial-policy/">編集方針</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <p class="crumb">トップ ＞ 冷凍庫の計算</p>
+  <h1 class="title">冷凍庫の容量から、入る食数を計算する</h1>
+  <p class="meta">確認日：2026年11月26日｜容器の寸法は各サービス公式サイトの表示｜つくってもらう編集部</p>
+
+  <article class="mock">
+    <h2>入る食数は、容器の高さと底面積で決まる</h2>
+    <img class="fig" src="../img/freezer.jpg" alt="">
+    <p>冷凍弁当が冷凍庫に入らない問題は、食数ではなく容器の大きさで起きます。公式に容器の寸法が出ているのは4社分で、同じ10食でも必要な容量は約6.2Lから約13.4Lまで開きます。冷凍室の容量と、今どれくらい埋まっているかを入れると、サービスごとに入る食数の目安が出ます。</p>
+
+    <div class="tool">
+      <label for="cap">冷凍室の容量</label>
+      <select id="cap">
+        <option value="25">25L前後（単身向け冷蔵庫）</option>
+        <option value="50" selected>50L前後（ファミリー向け標準）</option>
+        <option value="80">80L前後（大きめ）</option>
+        <option value="120">120L前後（セカンド冷凍庫あり）</option>
+      </select>
+      <label for="used">今の使用量（目安）</label>
+      <select id="used">
+        <option value="0.3">3割ほど埋まっている</option>
+        <option value="0.5" selected>半分ほど埋まっている</option>
+        <option value="0.7">7割ほど埋まっている</option>
+      </select>
+      <div class="result" id="result">
+        <p style="margin-top:0">空き容量 <strong id="free"></strong> L の場合、入る食数の目安です。</p>
+        <table>
+          <tr><th>サービス</th><th>容器1食の体積</th><th>入る食数の目安</th><th>積み重ねの高さ（10食）</th></tr>
+          <tbody id="rows"></tbody>
+        </table>
+        <p class="note">計算の前提：容器の体積は公式の寸法（底面積×高さ）から算出。冷凍室の形や仕切りで実際は前後するため、目安として書いています。寸法が公式に出ていないサービスは計算の対象に入れていません。</p>
+      </div>
+    </div>
+
+    <h2>入らない場合の選択肢</h2>
+    <p>計算で足りない場合、順番は次のとおりです。1回の食数を減らす、配送の頻度を上げる、容器の薄いサービスへ替える、それでも足りなければ保存が冷蔵の作り置き惣菜へ切り替える。冷凍庫を買い足す話は最後で、その前に単価と送料がどう変わるかを価格記録で見られます。</p>
+
+    <div class="judge">
+      <h3>編集部の見方</h3>
+      <p>冷凍庫の問題は申し込んだ後に分かることが多いため、このサイトでは容量の計算を申し込みより前に置いています。容器の高さは公式の数字だけで比べられる項目で、味や満足度のような個人差のある項目より先に決められます。</p>
+    </div>
+
+    <div class="src">
+      出典：nosh 公式サイト（容器 横18cm×縦16.5cm×高さ4.5cm）、まごころケア食公式サイト（高さ3.05cm）、ウェルネスダイニング公式サイト（高さ3cm）、ワタミの宅食ダイレクト公式サイト（三菜 高さ約2.6cm）。いずれも2026年11月26日確認。このページには広告を含みません。
+    </div>
+  </article>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <p>つくってもらう編集部｜お問い合わせ：contact@tsukuttemorau.com</p>
+    <p>計算結果は目安です。実際の収納量は冷凍室の形状と容器の置き方で変わります。</p>
+  </div>
+</footer>
+
+<script>
+var services = [
+  {name:"ワタミの宅食ダイレクト（三菜）", vol:0.622, h:2.6},
+  {name:"ウェルネスダイニング", vol:0.900, h:3.0},
+  {name:"まごころケア食", vol:0.906, h:3.05},
+  {name:"nosh", vol:1.337, h:4.5}
+];
+function calc(){
+  var cap = parseFloat(document.getElementById('cap').value);
+  var used = parseFloat(document.getElementById('used').value);
+  var free = cap * (1 - used);
+  document.getElementById('free').textContent = free.toFixed(1);
+  var rows = "";
+  services.forEach(function(s){
+    var n = Math.floor(free / s.vol);
+    rows += "<tr><td>"+s.name+"</td><td>約"+s.vol.toFixed(2)+"L</td><td>約"+n+"食</td><td>約"+(s.h*10).toFixed(0)+"cm</td></tr>";
+  });
+  document.getElementById('rows').innerHTML = rows;
+  document.getElementById('result').classList.add('show');
+}
+document.getElementById('cap').addEventListener('change', calc);
+document.getElementById('used').addEventListener('change', calc);
+calc();
+</script>
+</body>
+</html>
